@@ -3,10 +3,12 @@ package mts.homework.sivelkaev.application.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mts.homework.sivelkaev.application.controller.dto.CreateApplicationRequest;
+import mts.homework.sivelkaev.application.kafka.request.UpdateApplicationStatusRequest;
 import mts.homework.sivelkaev.application.model.entity.ApplicationEntity;
 import mts.homework.sivelkaev.application.model.repository.ApplicationRepository;
 import mts.homework.sivelkaev.application.service.ApplicationService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +26,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationEntity applicationEntity = ApplicationEntity.builder()
                 .createDate(LocalDate.now())
                 .type(req.getType())
+                .status("NEW")
                 .firstName(req.getFirstName())
                 .middleName(req.getMiddleName())
                 .lastName(req.getLastName())
@@ -33,5 +36,21 @@ public class ApplicationServiceImpl implements ApplicationService {
         applicationRepository.save(applicationEntity);
 
         return "Создана заявка " + applicationEntity.getId() + " на открытие счета.";
+    }
+
+    @Override
+    @Transactional
+    public void updateApplicationStatus(UpdateApplicationStatusRequest req) {
+        applicationRepository.findById(req.getId())
+                .ifPresentOrElse(application -> {
+                            if (!application.getStatus().equals(req.getStatus())) {
+                                application.setStatus(req.getStatus());
+                                log.info("Статус заявки {} обновлен на {}.", req.getId(), req.getStatus());
+                            }
+                        },
+                        () -> {
+                            log.error("Заявка {} не найдена.", req.getId());
+                            throw new IllegalArgumentException();
+                        });
     }
 }

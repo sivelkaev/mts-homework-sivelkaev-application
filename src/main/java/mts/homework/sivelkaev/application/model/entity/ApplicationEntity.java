@@ -30,6 +30,10 @@ public class ApplicationEntity implements Serializable {
     private String type;
 
     @NotBlank
+    @Column(name = "status")
+    private String status;
+
+    @NotBlank
     @Column(name = "first_name")
     private String firstName;
 
