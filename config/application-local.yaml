@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mts_homework_sivelkaev_application_db?prepareThreshold=0
+    username: sivelkaev
+    password: 1234

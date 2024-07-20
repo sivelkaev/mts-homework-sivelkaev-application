@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: HW-final
+      author: gasivelkay
+      labels: 2024.07.20
+      comment: "HW-final - Создание таблицы заявок application"
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                tableName: application
+      changes:
+        - sql:
+            sql: "CREATE TABLE users (
+                    id serial PRIMARY KEY,
+                    create_date date NOT NULL,
+                    type varchar(50) NOT NULL,
+                    status varchar(50) NOT NULL,
+                    first_name varchar(50) NOT NULL,
+                    middle_name varchar(50),
+                    last_name varchar(50) NOT NULL,
+                    birth_date date NOT NULL
+                  )"
+
+      rollback:
+        - dropTable:
+            tableName: application
