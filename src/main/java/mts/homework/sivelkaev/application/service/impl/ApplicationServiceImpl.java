@@ -8,6 +8,7 @@ import mts.homework.sivelkaev.application.kafka.KafkaProducerMethod;
 import mts.homework.sivelkaev.application.kafka.request.ApplicationStartFlowRequest;
 import mts.homework.sivelkaev.application.kafka.request.UpdateApplicationStatusRequest;
 import mts.homework.sivelkaev.application.model.entity.ApplicationEntity;
+import mts.homework.sivelkaev.application.model.enums.FinalApplicationStatusEnum;
 import mts.homework.sivelkaev.application.model.repository.ApplicationRepository;
 import mts.homework.sivelkaev.application.service.ApplicationService;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,10 @@ public class ApplicationServiceImpl implements ApplicationService {
                             if (!application.getStatus().equals(req.getStatus())) {
                                 application.setStatus(req.getStatus());
                                 log.info("Статус заявки {} обновлен на {}.", req.getId(), req.getStatus());
+
+                                if (FinalApplicationStatusEnum.contains(req.getStatus())) {
+                                    log.info("Заявка перешла в финальный статус, клиенту направлены инструкции");
+                                }
                             }
                         },
                         () -> {
