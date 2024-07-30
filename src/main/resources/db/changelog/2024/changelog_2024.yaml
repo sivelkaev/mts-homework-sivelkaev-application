@@ -2,3 +2,6 @@ databaseChangeLog:
   - include:
       file: ./changelog/changelog_2024-07-20_HW-final_01.yaml
       relativeToChangelogFile: true
+  - include:
+      file: ./changelog/changelog_2024-07-30_HW-final_02.yaml
+      relativeToChangelogFile: true
