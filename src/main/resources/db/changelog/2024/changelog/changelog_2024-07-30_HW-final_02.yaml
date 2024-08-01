@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: HW-final
+      author: gasivelkay
+      labels: 2024.07.30
+      comment: "HW-final - Создание таблицы счетов account"
+      preConditions:
+        - onFail: HALT
+        - not:
+            - tableExists:
+                tableName: account
+      changes:
+        - sql:
+            sql: "CREATE TABLE account (
+                    id serial PRIMARY KEY,
+                    create_date date NOT NULL default now(),
+                    client_id varchar(50) NOT NULL,
+                    application_id varchar(50) NOT NULL
+                  )"
+
+      rollback:
+        - dropTable:
+            tableName: account
